@@ -27,22 +27,12 @@ pipeline {
             }
         }
 
-      stage('安装依赖') {
-            steps {
-                  sh '''
-                      # 为 Jenkins 用户安装
-                      sudo -u jenkins npm install -g pnpm@6 --prefix /var/lib/jenkins/.npm-global
-                      export PATH="/var/lib/jenkins/.npm-global/bin:$PATH"
-                      pnpm install
-                  '''
-              }
-        }
 
         stage('构建代码') {
             steps {
                 sh """
-                pnpm install
-                pnpm build
+                npm install
+                npm build
                 """
                 echo '--------------构建完成!--------------'
             }
