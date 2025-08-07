@@ -20,6 +20,7 @@ pipeline {
                     pnpm -v
                 '''
             }
+      }
 
         stage('重置环境') {
             steps {
