@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs 'node14'  // 指定 Jenkins 全局工具配置中的 Node.js 版本
+        nodejs 'NodeJS 14.9.0'  // 指定 Jenkins 全局工具配置中的 Node.js 版本
     }
     stages {
         stage('拉取代码') {
