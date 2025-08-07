@@ -8,7 +8,7 @@ pipeline {
         stage('拉取代码') {
             steps {
                 // 使用流水线语法生成
-                git credentialsId: 'ad68df2e-173e-48dc-9094-64d6a3d08150', url: 'https://gitee.com/tianchencheng/my-vue3-web.git'
+                git credentialsId: 'ad68df2e-173e-48dc-9094-64d6a3d08150', url: 'git@github.com:15072601235/pokeceshi.git'
                 echo '--------------代码拉取成功!--------------'
             }
         }
