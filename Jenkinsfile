@@ -27,6 +27,15 @@ pipeline {
             }
         }
 
+      stage('安装依赖') {
+          steps {
+          sh '''
+            # 使用绝对路径（根据您的实际安装位置调整）
+            /home/shichengh/.nvm/versions/node/v14.9.0/bin/pnpm install
+          '''
+            }
+      }
+
         stage('构建代码') {
             steps {
                 sh """
