@@ -13,15 +13,6 @@ pipeline {
             }
         }
 
-      stage('Setup') {
-            steps {
-                sh '''
-                    npm install -g pnpm@6
-                    pnpm -v
-                '''
-            }
-      }
-
         stage('重置环境') {
             steps {
                 // 需要使用流水线语法生成
