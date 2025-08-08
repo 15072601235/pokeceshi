@@ -68,7 +68,8 @@ pipeline {
                                     """
                                 )
                             ],
-                            usePty: true  # 启用伪终端
+                            //启用伪终端
+                            usePty: true  
                         )
                     ])
                 }
