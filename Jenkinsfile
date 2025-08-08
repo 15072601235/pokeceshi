@@ -55,7 +55,8 @@ pipeline {
                                 sshTransfer(
                                     sourceFiles: 'dist/**',
                                     remoteDirectory: 'webApps/myVue3Web',
-                                    execCommand: ""  # 仅传输不执行命令
+                                    //仅传输不执行命令
+                                    execCommand: ""  
                                 ),
                                 sshTransfer(
                                     sourceFiles: 'Dockerfile',
