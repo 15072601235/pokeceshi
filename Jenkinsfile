@@ -81,7 +81,7 @@ pipeline {
     always {
         sh '''
             echo "=== 部署验证 ==="
-            ssh jenkins@目标服务器 "
+            ssh jenkins@192.168.1.107 "
                 echo '最后部署状态:';
                 docker ps -a | grep my-vue3-web;
                 echo '目录内容:';
