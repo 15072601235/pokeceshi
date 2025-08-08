@@ -63,8 +63,9 @@ pipeline {
                                     remoteDirectory: 'webApps/myVue3Web',
                                     execCommand: """
                                     # 使用完整路径执行
-                                    /usr/bin/docker build -t my-vue3-web /home/jenkins/webApps/myVue3Web && \
-                                    /usr/bin/docker run --rm -d -p 80:80 --name my-vue3-web my-vue3-web
+                                    cd /home/jenkins/webApps/myVue3Web && \
+                            /usr/bin/docker build . -t my-vue3-web && \
+                            /usr/bin/docker run -d -p 80:80 my-vue3-web
                                     """
                                 )
                             ],
@@ -75,4 +76,20 @@ pipeline {
                 }
         }
     }
+
+  post {
+    always {
+        sh '''
+            echo "=== 部署验证 ==="
+            ssh jenkins@目标服务器 "
+                echo '最后部署状态:';
+                docker ps -a | grep my-vue3-web;
+                echo '目录内容:';
+                ls -la /home/jenkins/webApps/myVue3Web;
+                echo 'Docker日志:';
+                docker logs my-vue3-web || echo '容器不存在'
+            "
+        '''
+    }
+}
 }
