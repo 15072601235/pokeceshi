@@ -62,11 +62,14 @@ pipeline {
                                     sourceFiles: 'Dockerfile',
                                     remoteDirectory: 'webApps/myVue3Web',
                                     execCommand: """
-                                    # 使用完整路径执行
-                                    cd /home/jenkins/webApps/myVue3Web && \
-                            /usr/bin/docker build . -t my-vue3-web && \
-                            /usr/bin/docker run -d -p 80:80 my-vue3-web
-                                    """
+                        cd /home/jenkins/webApps/myVue3Web && \
+                        echo '=== 开始构建 ===' && \
+                        docker build --network=host -t my-vue3-web . > build.log 2>&1 && \
+                        echo '=== 启动容器 ===' && \
+                        (docker rm -f my-vue3-web || true) && \
+                        docker run -d -p 80:80 --name my-vue3-web my-vue3-web >> build.log 2>&1 && \
+                        echo '=== 部署成功 ===' >> build.log
+                        """
                                 )
                             ],
                         )
