@@ -39,14 +39,38 @@ pipeline {
         }
 
         stage('部署服务') {
-            steps {
-                // 需要使用流水线语法生成 先发送dist文件，再发送Dockerfile文件，并且执行命令
-                sshPublisher(publishers: [sshPublisherDesc(configName: 'DockerServer-test', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'webApps/myVue3Web', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**/*'), sshTransfer(cleanRemote: false, excludes: '', execCommand:
-                    '''cd webApps/myVue3Web
-                    docker build -t my-vue3-web .
-                    docker run -d --name my-vue3-web -p 80:80 -v /root/webApps/myVue3Web/nginx-conf/nginx.conf:/etc/nginx/conf.d/default.conf my-vue3-web''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'webApps/myVue3Web', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'Dockerfile')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
-                echo '--------------服务部署完成!--------------'
-            }
+                steps {
+                    sshPublisher(publishers: [
+                        sshPublisherDesc(
+                            configName: 'DockerServer-test',
+                            transfers: [
+                                sshTransfer(
+                                    execCommand: """
+                                    # 确保目录可写
+                                    mkdir -p /home/jenkins/webApps/myVue3Web/dist
+                                    chown -R jenkins:docker /home/jenkins/webApps
+                                    chmod -R 775 /home/jenkins/webApps
+                                    """
+                                ),
+                                sshTransfer(
+                                    sourceFiles: 'dist/**',
+                                    remoteDirectory: 'webApps/myVue3Web',
+                                    execCommand: ""  # 仅传输不执行命令
+                                ),
+                                sshTransfer(
+                                    sourceFiles: 'Dockerfile',
+                                    remoteDirectory: 'webApps/myVue3Web',
+                                    execCommand: """
+                                    # 使用完整路径执行
+                                    /usr/bin/docker build -t my-vue3-web /home/jenkins/webApps/myVue3Web && \
+                                    /usr/bin/docker run --rm -d -p 80:80 --name my-vue3-web my-vue3-web
+                                    """
+                                )
+                            ],
+                            usePty: true  # 启用伪终端
+                        )
+                    ])
+                }
         }
     }
 }
