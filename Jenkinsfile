@@ -48,7 +48,7 @@ pipeline {
                                     execCommand: """
                                     # 确保目录可写
                                     mkdir -p /home/jenkins/webApps/myVue3Web/dist
-                                    chown -R jenkins:docker /home/jenkins/webApps
+                                    chown -R shichengh:docker /home/jenkins/webApps
                                     chmod -R 775 /home/jenkins/webApps
                                     """
                                 ),
@@ -79,7 +79,7 @@ pipeline {
     always {
         sh '''
             echo "=== 部署验证 ==="
-            ssh jenkins@192.168.1.107 "
+            ssh shichengh@192.168.1.107 "
                 echo '最后部署状态:';
                 docker ps -a | grep my-vue3-web;
                 echo '目录内容:';
