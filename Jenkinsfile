@@ -27,7 +27,7 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('测试python脚本') {
             steps {
                 // 调用Python脚本
                 script {
