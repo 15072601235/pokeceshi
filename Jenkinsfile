@@ -27,6 +27,18 @@ pipeline {
             }
         }
 
+        stage('Test') {
+            steps {
+                // 调用Python脚本
+                script {
+                    def exitCode = sh(script: 'python3 test_script.py', returnStdout: true).trim().toInteger()
+                    if (exitCode != 0) {
+                        error 'Python tests failed'
+                    }
+                }
+            }
+        }
+
 
         stage('构建代码') {
             steps {
