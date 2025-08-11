@@ -28,17 +28,15 @@ pipeline {
         }
 
         stage('测试python脚本') {
-            steps {
-                // 调用Python脚本
-                script {
-                    def exitCode = sh(script: 'python3 test_script.py', returnStdout: true).trim().toInteger()
-                    if (exitCode != 0) {
-                        error 'Python tests failed'
-                    }
-                  echo '--------------python测试完成!--------------'
-                }
-            }
+    steps {
+        script {
+            def output = sh(script: 'python3 test_script.py', returnStdout: true).trim()
+            // 如果脚本失败，sh 会直接抛出异常，后续代码不会执行
+            echo "Python 输出: ${output}"
+            echo '--------------python测试完成!--------------'
         }
+    }
+}
 
 
         stage('构建代码') {
