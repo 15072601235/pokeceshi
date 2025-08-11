@@ -35,6 +35,7 @@ pipeline {
                     if (exitCode != 0) {
                         error 'Python tests failed'
                     }
+                  echo '--------------python测试完成!--------------'
                 }
             }
         }
